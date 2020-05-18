@@ -1,5 +1,8 @@
 let net = require('Net');
 
+let ModelPlayer = require('ModelPlayer');
+
+
 cc.Class({
     extends: cc.Component,
 
@@ -51,8 +54,6 @@ cc.Class({
             return;
         }
 
-        console.log("btn_enter_game:", acct, pass);
-
         net.send({
             op: 'login',
             acct: acct,
@@ -69,6 +70,9 @@ cc.Class({
     on_msg(msg) {
         if (msg.op == 'login') {
             if (msg.ret == 0) {
+                ModelPlayer.pid = msg.data.pid;
+                ModelPlayer.name = msg.data.name;
+                ModelPlayer.coin = msg.data.coin;
                 cc.director.loadScene('game');
             } else {
                 console.log('login failed:', msg.msg);

@@ -174,7 +174,7 @@
       "array": [
         0,
         0,
-        585.4331729582806,
+        850.4369465163188,
         0,
         0,
         0,
@@ -703,7 +703,7 @@
       "__id__": 10
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 15
@@ -768,10 +768,14 @@
       "__id__": 14
     },
     "_enabled": true,
-    "_materials": [],
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
     "_useOriginalSize": true,
-    "_string": "",
-    "_N$string": "",
+    "_string": "zcg",
+    "_N$string": "zcg",
     "_fontSize": 20,
     "_lineHeight": 25,
     "_enableWrapText": false,
@@ -823,7 +827,7 @@
       "__id__": 10
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 18
@@ -948,7 +952,7 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "",
+    "_string": "zcg",
     "returnType": 0,
     "maxLength": 8,
     "_tabIndex": 0,
@@ -1174,7 +1178,7 @@
       "__id__": 21
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 26
@@ -1239,10 +1243,14 @@
       "__id__": 25
     },
     "_enabled": true,
-    "_materials": [],
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
     "_useOriginalSize": true,
-    "_string": "",
-    "_N$string": "",
+    "_string": "1",
+    "_N$string": "1",
     "_fontSize": 20,
     "_lineHeight": 25,
     "_enableWrapText": false,
@@ -1294,7 +1302,7 @@
       "__id__": 21
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 29
@@ -1419,7 +1427,7 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_string": "",
+    "_string": "1",
     "returnType": 0,
     "maxLength": 8,
     "_tabIndex": 0,
@@ -1827,7 +1835,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Root",
+    "_name": "Script",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1

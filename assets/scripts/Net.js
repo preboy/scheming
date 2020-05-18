@@ -1,9 +1,6 @@
 let socket;
-let fn_msgcb;     // 消息回调函数
-let fn_evtcb;     // socket事件函数
-
-
-
+let cb_msg;     // 消息回调函数
+let cb_evt;     // socket事件函数
 
 
 // ----------------------------------------------------------------------------
@@ -15,12 +12,12 @@ exports.connect = function () {
         return;
     }
 
-    let ws = new WebSocket('ws://118.24.48.149:31001');
+    let ws = new WebSocket('ws://localhost:31001');
 
     ws.onopen = function (event) {
         console.log("网络连接建立成功");
-        if (fn_evtcb) {
-            fn_evtcb('open');
+        if (cb_evt) {
+            cb_evt('open');
         }
     };
 
@@ -32,8 +29,8 @@ exports.connect = function () {
             console.error("解析消息失败: " + event.data);
         }
 
-        if (fn_msgcb) {
-            fn_msgcb(msg);
+        if (cb_msg) {
+            cb_msg(msg);
         }
     };
 
@@ -42,8 +39,8 @@ exports.connect = function () {
     };
 
     ws.onclose = function (event) {
-        if (fn_evtcb) {
-            fn_evtcb('close');
+        if (cb_evt) {
+            cb_evt('close');
         }
 
         socket = null;
@@ -66,6 +63,6 @@ exports.send = function (msg) {
 }
 
 exports.register = function (fn_msg, fn_evt) {
-    fn_msgcb = fn_msg;
-    fn_evtcb = fn_evt;
+    cb_msg = fn_msg;
+    cb_evt = fn_evt;
 }
