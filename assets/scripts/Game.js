@@ -28,7 +28,10 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
-        this.members = [];
+
+        this.data = Array(17);
+        this.members = Array(17);
+
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 6; j++) {
                 let x = (j - 2) * 120;
@@ -56,10 +59,6 @@ cc.Class({
     },
 
     start() {
-        this.cards = cc.instantiate(this.seat);
-        this.cards.setPosition(0, 0);
-        this.root.addChild(this.cards);
-
         this.nick_name.string = ModelPlayer.name;
         this.coin.string = ModelPlayer.coin;
     },
@@ -75,14 +74,19 @@ cc.Class({
         }
 
         if (msg.op == 'join') {
-            // this.showTip('join ok');
             this.on_join(msg.data);
         } else if (msg.op == 'leave') {
             this.showTip('leave ok');
         } else if (msg.op == 'look') {
-            this.showTip('look ok');
-        } else if (msg.op == 'action') {
-            this.showTip('action ok');
+            this.data[this.my_pos].cards = msg.cards;
+            this.draw_seat(this.my_pos);
+            // this.showTip('look ok');
+        } else if (msg.op == 'attack') {
+            // this.showTip('attack ok');
+        } else if (msg.op == 'quit') {
+            // this.showTip('quit ok');
+        } else if (msg.op == 'waiver') {
+            // this.showTip('waiver ok');
         } else if (msg.op == 'value') {
             this.showTip('value ok');
         } else if (msg.op == 'add_coin') {
@@ -90,19 +94,44 @@ cc.Class({
         }
         // 广播类消息(通知)
         else if (msg.op == 'join_n') {
-            // this.showTip('abandon ok');
+            if (msg.data.pid != ModelPlayer.pid) {
+                this.data[msg.pos] = msg.data;
+                this.draw_seat(msg.pos);
+                this.showTip(`${msg.data.name}加入了桌子`);
+            }
         } else if (msg.op == 'leave_n') {
 
         } else if (msg.op == 'look_n') {
-
-        } else if (msg.op == 'action_n') {
-
+            this.data[msg.pos].look = true;
+            this.draw_seat(msg.pos);
+        } else if (msg.op == 'attack_n') {
+            if (msg.win) {
+                this.data[msg.pos] = msg.data_win;
+                this.data[msg.target] = msg.data_lost;
+                this.draw_seat(msg.pos);
+                this.draw_seat(msg.target);
+            } else {
+                this.data[msg.pos] = msg.data_lost;
+                this.data[msg.target] = msg.data_win;
+                this.draw_seat(msg.pos);
+                this.draw_seat(msg.target);
+            }
         } else if (msg.op == 'value_n') {
-
+            this.data[msg.pos].value = msg.value;
+            this.data[msg.pos].balance = msg.balance;
+            this.draw_seat(msg.pos);
         } else if (msg.op == 'deal_n') {
-            this.draw_seats(msg.info);
+            for (let i = 0; i < 17; i++) {
+                this.data[i] = msg.info.seats[i];
+                this.draw_seat(i);
+            }
         } else if (msg.op == 'turn_n') {
             this.showTip(`该 ${msg.turn} 出手了`);
+        } else if (msg.op == 'bout_result_n') {
+            for (let i = 0; i < 17; i++) {
+                this.data[i].cards = msg.cards[i];
+                this.draw_seat(i);
+            }
         }
         // 其他消息
         else if (msg.op == 'property') {
@@ -112,8 +141,9 @@ cc.Class({
                 ModelPlayer.coin = msg.coin;
                 this.coin.string = msg.coin;
             }
-        }
-        else {
+        } else if (msg.op = 'notify') {
+            this.showTip(msg.str);
+        } else {
             console.log(`未处理的消息: op = ${msg.op}`, msg);
         }
     },
@@ -153,15 +183,13 @@ cc.Class({
 
     btn_quit() {
         net.send({
-            op: 'action',
-            subop: 'quit',
+            op: 'quit',
         });
     },
 
     btn_waiver() {
         net.send({
-            op: 'action',
-            subop: 'waiver',
+            op: 'waiver',
         });
     },
 
@@ -186,14 +214,30 @@ cc.Class({
             name : "",
         }
         */
-        this.draw_seats(data);
+
+        // 找到自己
+        for (let i = 0; i < 17; i++) {
+            if (data.seats[i].pid == ModelPlayer.pid) {
+                this.my_pos = data.seats[i].pos;
+                ModelPlayer.pos = this.my_pos;
+                break;
+            }
+        }
+
+        for (let i = 0; i < 17; i++) {
+            this.data[i] = data.seats[i];
+            this.draw_seat(i);
+        }
     },
 
-    draw_seats(data) {
+    draw_seat(idx) {
+        let s = this.members[idx].getComponent('Seat');
+        s.draw(this.data[idx]);
+    },
+
+    draw_seats() {
         for (let i = 0; i < 17; i++) {
-            let s = this.members[i].getComponent('Seat');
-            s.set_data(data.seats[i]);
-            s.draw();
+            this.draw_seat(i);
         }
     },
 

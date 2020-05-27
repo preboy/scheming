@@ -71,6 +71,7 @@ cc.Class({
         if (msg.op == 'login') {
             if (msg.ret == 0) {
                 ModelPlayer.pid = msg.data.pid;
+                ModelPlayer.pos = msg.data.pos;
                 ModelPlayer.name = msg.data.name;
                 ModelPlayer.coin = msg.data.coin;
                 cc.director.loadScene('game');

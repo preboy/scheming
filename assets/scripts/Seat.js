@@ -6,6 +6,8 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 let net = require('Net');
+let ModelPlayer = require('ModelPlayer');
+
 
 cc.Class({
     extends: cc.Component,
@@ -56,29 +58,30 @@ cc.Class({
         this.data = {};
 
         this.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            console.log('TOUCH_END', this.idx);
+            if (ModelPlayer.pos == this.pos) {
+                return;
+            }
+
             net.send({
-                op: 'action',
-                subop: 'attack',
-                target: this.idx,
+                op: 'attack',
+                target: this.pos,
             });
         }, this);
     },
 
     start() {
-        // setTimeout(() => { this.exhibit(true); }, 1000);
     },
 
     // ------------------------------------------------------------------------
 
-    init(idx) {
-        this.idx = idx;
+    init(pos) {
+        this.pos = pos;
     },
 
-    set_seat_point(arr) {
-        this.cards[0].getComponent('Card').set_card_point(1, 1);
-        this.cards[1].getComponent('Card').set_card_point(2, 4);
-        this.cards[2].getComponent('Card').set_card_point(3, 2);
+    set_cards(arr) {
+        this.cards[0].getComponent('Card').set_card_point(arr[0].type, arr[0].point);
+        this.cards[1].getComponent('Card').set_card_point(arr[1].type, arr[1].point);
+        this.cards[2].getComponent('Card').set_card_point(arr[2].type, arr[2].point);
     },
 
     exhibit(flag) {
@@ -91,11 +94,7 @@ cc.Class({
         this.desc.string = str;
     },
 
-    set_data(data) {
-        this.data = data;
-    },
-
-    draw() {
+    draw(data) {
         /*
           let obj = {
             pos: this.pos,
@@ -106,14 +105,40 @@ cc.Class({
             value: this.value,
             balance: this.balance,
             winner: this.winner,
+            cards:null,
             name : "",
         }
         */
 
-        let data = this.data;
-
         this.nickname.string = data.name;
         this.wager.string = `${data.value}倍: ${data.balance}`;
+
+        if (data.cards) {
+            this.set_cards(data.cards);
+            this.exhibit(true);
+        } else {
+            this.exhibit(false);
+        }
+
+        let str = '';
+
+        if (data.look) {
+            str += ' 看';
+        }
+
+        if (data.quit) {
+            str += ' 离';
+        }
+
+        if (data.winner != null) {
+            str += ' 败';
+        }
+
+        if (str.length > 0 && str[0] == ' ') {
+            str = str.substr(1);
+        }
+
+        this.set_desc(str);
     }
 
     // update (dt) {},
