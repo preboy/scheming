@@ -50,9 +50,9 @@ cc.Class({
         this.card_root.addChild(this.cards[1], 1, '1');
         this.card_root.addChild(this.cards[2], 2, '2');
 
-        this.cards[0].setPosition(-20, 0);
+        this.cards[0].setPosition(-24, 0);
         this.cards[1].setPosition(0, 0);
-        this.cards[2].setPosition(20, 0);
+        this.cards[2].setPosition(24, 0);
 
         this.show = false;
         this.data = {};

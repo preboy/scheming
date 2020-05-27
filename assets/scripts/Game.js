@@ -34,7 +34,7 @@ cc.Class({
 
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 6; j++) {
-                let x = (j - 2) * 120;
+                let x = (j - 2) * 125;
                 let y = (i - 1) * 140;
                 let idx = i * 6 + j;
 
@@ -106,6 +106,9 @@ cc.Class({
             this.draw_seat(msg.pos);
         } else if (msg.op == 'attack_n') {
             if (msg.win) {
+                if (msg.pos == ModelPlayer.pos && msg.data_win.look) {
+                    msg.data_win.cards = this.data[msg.pos].cards;
+                }
                 this.data[msg.pos] = msg.data_win;
                 this.data[msg.target] = msg.data_lost;
                 this.draw_seat(msg.pos);
