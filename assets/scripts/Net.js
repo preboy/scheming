@@ -12,8 +12,8 @@ exports.connect = function () {
         return;
     }
 
-    let ws = new WebSocket('ws://localhost:31001');
-    // let ws = new WebSocket('ws://118.24.48.149:31001');
+    // let ws = new WebSocket('ws://localhost:31001');
+    let ws = new WebSocket('ws://118.24.48.149:31001');
 
     ws.onopen = function (event) {
         console.log("网络连接建立成功");
