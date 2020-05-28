@@ -119,6 +119,12 @@ cc.Class({
                 this.draw_seat(msg.pos);
                 this.draw_seat(msg.target);
             }
+        } else if (msg.op == 'quit_n') {
+            this.data[msg.pos] = msg.data;
+            this.draw_seat(msg.pos);
+        } else if (msg.op == 'waiver_n') {
+            this.data[msg.pos] = msg.data;
+            this.draw_seat(msg.pos);
         } else if (msg.op == 'value_n') {
             this.data[msg.pos].value = msg.value;
             this.data[msg.pos].balance = msg.balance;
@@ -138,7 +144,7 @@ cc.Class({
         }
         // 其他消息
         else if (msg.op == 'property') {
-            if (msg.coin) {
+            if (msg.coin != undefined) {
                 let diff = msg.coin - ModelPlayer.coin;
                 this.showTip(`钻石变化量: ${diff}`);
                 ModelPlayer.coin = msg.coin;

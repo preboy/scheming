@@ -130,6 +130,10 @@ cc.Class({
             str += ' 离';
         }
 
+        if (data.waiver) {
+            str += ' 弃';
+        }
+
         if (data.winner != null) {
             str += ' 败';
         }
